@@ -1,44 +1,60 @@
-# ChatGPT Codex Home Assistant Add-on Repository
+# 🚀 Codex Command Center for Home Assistant
 
-This repository provides a Home Assistant add-on that exposes OpenAI Codex through a browser-based terminal (`ttyd`).
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Add--on-41BDF5?logo=homeassistant&logoColor=white)](https://www.home-assistant.io/)
+[![Version](https://img.shields.io/badge/version-1.0.0-success)](./chatgpt-codex/config.yaml)
+[![Stars welcome](https://img.shields.io/badge/⭐-Star%20this%20repo-yellow)](#support-the-project)
 
-## Features
+Give your smart home a real AI terminal: **Codex Command Center** brings the OpenAI Codex CLI directly into Home Assistant with secure Ingress access and a polished operator experience.
 
-- **Ingress integration** — access the terminal directly from the HA UI, protected by HA authentication
-- **Multi-architecture** — amd64 and aarch64
-- **AppArmor profile** — restrictive security profile
-- **Configurable** — API key, theme, font size, max sessions
-- **bashio-powered** — structured logging in the HA log viewer
+---
 
-## Installation
+## ✨ Why this project stands out
 
-1. In Home Assistant, go to **Settings > Add-ons > Add-on Store**.
-2. Open **⋮ > Repositories** and add this repository URL.
-3. Install the **ChatGPT Codex** add-on.
-4. Set your `openai_api_key` in the add-on configuration.
-5. Start the add-on and click **Open Web UI**.
+- **Native Home Assistant UX** — launch directly in the HA sidebar with authentication.
+- **Ready in minutes** — install add-on, paste API key, start building.
+- **Production-minded defaults** — AppArmor profile, structured logs, configurable sessions.
+- **Built for makers** — works great for automations, scripts, YAML workflows, and diagnostics.
 
-## Project Structure
+## 🧩 Feature highlights
 
-```
+- Ingress web terminal (ttyd)
+- OpenAI Codex CLI pre-installed
+- Multi-architecture support (amd64, aarch64)
+- Theme + font-size customization
+- Configurable max concurrent sessions
+- Custom workspace and optional API base URL
+
+## ⚡ Quick install
+
+1. Open **Home Assistant → Settings → Add-ons → Add-on Store**.
+2. Click **⋮ → Repositories** and add this repository URL.
+3. Install **Codex Command Center**.
+4. Set your `openai_api_key`.
+5. Start the add-on and open the Web UI.
+
+## 🗂️ Repository layout
+
+```text
 chatgpt-codex/
-├── translations/       # Translations (EN/DE)
-├── apparmor.txt        # AppArmor security profile
-├── build.yaml          # Multi-arch build configuration
-├── CHANGELOG.md        # Version history
-├── config.yaml         # Add-on manifest
-├── DOCS.md             # User documentation
-├── Dockerfile          # Container build
-├── icon.png            # Add-on icon
-├── logo.png            # Add-on logo
-└── run.sh              # Entry point script (bashio)
+├── translations/
+├── apparmor.txt
+├── build.yaml
+├── CHANGELOG.md
+├── config.yaml
+├── DOCS.md
+├── Dockerfile
+├── icon.png
+├── logo.png
+└── run.sh
 ```
 
-## Development
+## 🤝 Support the project
 
-```bash
-# Build the Docker image locally
-cd chatgpt-codex && docker build -t chatgpt-codex:latest .
-```
+If this add-on saves you time, please:
 
-See [CHANGELOG.md](chatgpt-codex/CHANGELOG.md) for the version history.
+- ⭐ **Star this repository**
+- 🍴 **Fork it for your own variant**
+- 🐛 Open issues with reproducible bug reports
+- 💡 Share ideas for integrations and workflows
+
+This helps the project grow and makes it easier for others to discover.
