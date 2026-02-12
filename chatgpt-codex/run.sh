@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 set -euo pipefail
 
-echo "[INFO] ChatGPT Codex add-on starting..."
+echo "[INFO] Home Assistant Codex Command Center add-on starting..."
 
 # Read configuration from Home Assistant options
 OPTIONS="/data/options.json"
@@ -67,7 +67,7 @@ if [ -z "${CODEX_PATH}" ]; then
 fi
 echo "[INFO] codex found at: ${CODEX_PATH}"
 
-echo "[INFO] Starting ChatGPT Codex terminal on port ${PORT}..."
+echo "[INFO] Starting Home Assistant Codex Command Center terminal on port ${PORT}..."
 echo "[INFO] Workspace: ${WORKSPACE}"
 echo "[DEBUG] ttyd args: ${TTYD_ARGS[*]}"
 

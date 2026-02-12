@@ -1,7 +1,7 @@
-name: ChatGPT Codex
-version: "1.10.0"
+name: Home Assistant Codex Command Center
+version: "1.0.0"
 slug: chatgpt_codex
-description: Run OpenAI Codex CLI in Home Assistant via a browser terminal.
+description: Home Assistant add-on: Codex CLI workspace via secure browser terminal.
 url: "https://github.com/OWNER/chatgpt-codex-home-assistant"
 arch:
   - aarch64
