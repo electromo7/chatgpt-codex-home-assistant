@@ -1,19 +1,19 @@
 name: ChatGPT Codex
-version: "1.0.0"
+version: "1.1.0"
 slug: chatgpt_codex
 description: Run OpenAI Codex CLI in Home Assistant via a browser terminal.
 url: "https://github.com/OWNER/chatgpt-codex-home-assistant"
 arch:
   - aarch64
   - amd64
-  - armhf
-  - armv7
-  - i386
 startup: services
 boot: auto
 init: false
+ingress: true
+ingress_port: 7681
+ingress_stream: true
 ports:
-  7681/tcp: 7681
+  7681/tcp: null
 ports_description:
   7681/tcp: Browser terminal (ttyd)
 map:
@@ -21,13 +21,20 @@ map:
   - homeassistant_config:rw
   - share:rw
   - ssl
+apparmor: true
 options:
   openai_api_key: ""
   openai_base_url: ""
   codex_args: ""
   workspace: /share
+  theme: "default"
+  font_size: 14
+  max_sessions: 1
 schema:
   openai_api_key: password?
   openai_base_url: str?
   codex_args: str?
   workspace: str
+  theme: "list(default|dark)?"
+  font_size: "int(8,32)?"
+  max_sessions: "int(1,5)?"

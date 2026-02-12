@@ -1,0 +1,22 @@
+configuration:
+  openai_api_key:
+    name: OpenAI API-Schlüssel
+    description: Dein OpenAI API-Schlüssel zur Authentifizierung beim Codex-Dienst.
+  openai_base_url:
+    name: OpenAI Basis-URL
+    description: Benutzerdefinierte Basis-URL für die OpenAI API (leer lassen für Standard).
+  codex_args:
+    name: Codex-Argumente
+    description: Zusätzliche Kommandozeilenargumente für das Codex CLI.
+  workspace:
+    name: Arbeitsverzeichnis
+    description: Arbeitsverzeichnis in dem Codex arbeitet (Standard /share).
+  theme:
+    name: Terminal-Theme
+    description: Visuelles Theme für das Browser-Terminal (default oder dark).
+  font_size:
+    name: Schriftgröße
+    description: Schriftgröße für das Browser-Terminal (8-32).
+  max_sessions:
+    name: Max. Sitzungen
+    description: Maximale Anzahl gleichzeitiger Terminal-Sitzungen (1-5).

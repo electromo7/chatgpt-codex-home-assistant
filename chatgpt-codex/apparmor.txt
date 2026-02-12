@@ -1,0 +1,58 @@
+#include <tunables/global>
+
+profile chatgpt_codex flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+
+  # Receive signals from S6 supervisor
+  signal (receive) peer=*_supervisor,
+
+  # Access to options.json
+  /data/** rw,
+
+  # Access to mounted volumes
+  /share/** rw,
+  /config/** rw,
+  /ssl/** r,
+  /addon_configs/** rw,
+
+  # Node.js and npm execution
+  /usr/bin/node ix,
+  /usr/bin/npm ix,
+  /usr/local/bin/** ix,
+  /usr/lib/node_modules/** r,
+
+  # ttyd execution
+  /usr/bin/ttyd ix,
+
+  # Bash and common utilities
+  /bin/** ix,
+  /usr/bin/** ix,
+
+  # Git execution
+  /usr/bin/git ix,
+  /usr/libexec/git-core/** ix,
+
+  # Temp files
+  /tmp/** rw,
+  /var/tmp/** rw,
+
+  # Proc and sys (read-only)
+  @{PROC}/@{pid}/stat r,
+  @{PROC}/@{pid}/net/** r,
+
+  # Network access (ttyd + OpenAI API)
+  network inet stream,
+  network inet dgram,
+  network inet6 stream,
+  network inet6 dgram,
+
+  # DNS resolution
+  /etc/resolv.conf r,
+  /etc/hosts r,
+  /etc/nsswitch.conf r,
+
+  # Deny access to sensitive system files
+  deny /etc/shadow r,
+  deny /etc/passwd w,
+  deny /proc/sysrq-trigger w,
+}

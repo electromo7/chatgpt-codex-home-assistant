@@ -1,31 +1,35 @@
 # Home Assistant Add-on: ChatGPT Codex
 
-Run the OpenAI Codex CLI inside Home Assistant through a browser terminal (ttyd).
+Run the OpenAI Codex CLI inside Home Assistant through a browser-based terminal.
 
 ## Features
 
-- Browser-based shell on port `7681`
-- Codex CLI pre-installed
-- Optional `OPENAI_API_KEY` and `OPENAI_BASE_URL`
-- Configurable workspace path and custom Codex arguments
+- **Ingress integration** — access the terminal directly from the HA sidebar, authenticated through Home Assistant
+- **Codex CLI pre-installed** — ready to use out of the box
+- **Multi-architecture** — supports amd64 and aarch64
+- **Configurable** — API key, custom base URL, workspace path, terminal theme, font size, and session limits
+- **AppArmor secured** — runs with a restrictive security profile
+- **bashio-powered** — structured logging visible in the HA log viewer
 
-## Options
+## Quick Start
 
-```yaml
-openai_api_key: ""
-openai_base_url: ""
-codex_args: ""
-workspace: /share
-```
+1. Add this repository to your Home Assistant add-on store.
+2. Install the "ChatGPT Codex" add-on.
+3. Set your `openai_api_key` in the add-on configuration.
+4. Start the add-on and click **Open Web UI**.
 
-## Usage
+## Configuration
 
-1. Set your `openai_api_key` in the add-on options.
-2. Start the add-on.
-3. Open `http://<home-assistant-host>:7681`.
-4. Use Codex from the terminal.
+| Option | Default | Description |
+|--------|---------|-------------|
+| `openai_api_key` | *(required)* | Your OpenAI API key |
+| `openai_base_url` | *(empty)* | Custom API endpoint |
+| `codex_args` | *(empty)* | Extra Codex CLI arguments |
+| `workspace` | `/share` | Working directory |
+| `theme` | `default` | Terminal theme (`default` or `dark`) |
+| `font_size` | `14` | Terminal font size (8–32) |
+| `max_sessions` | `1` | Max concurrent sessions (1–5) |
 
-## Notes
+## Documentation
 
-- The add-on starts Codex in the configured `workspace` directory.
-- Keep API keys in add-on options, not in scripts checked into Git.
+See [DOCS.md](DOCS.md) for detailed usage instructions and troubleshooting.

@@ -3,6 +3,7 @@ FROM ${BUILD_FROM}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
     bash \
     curl \
