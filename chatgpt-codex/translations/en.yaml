@@ -1,3 +1,4 @@
+---
 configuration:
   openai_api_key:
     name: OpenAI API Key

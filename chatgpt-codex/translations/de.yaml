@@ -1,10 +1,15 @@
+---
 configuration:
   openai_api_key:
     name: OpenAI API-Schlüssel
-    description: Dein OpenAI API-Schlüssel zur Authentifizierung beim Codex-Dienst.
+    description: >-
+      Dein OpenAI API-Schlüssel zur Authentifizierung
+      beim Codex-Dienst.
   openai_base_url:
     name: OpenAI Basis-URL
-    description: Benutzerdefinierte Basis-URL für die OpenAI API (leer lassen für Standard).
+    description: >-
+      Benutzerdefinierte Basis-URL für die OpenAI API
+      (leer lassen für Standard).
   codex_args:
     name: Codex-Argumente
     description: Zusätzliche Kommandozeilenargumente für das Codex CLI.
