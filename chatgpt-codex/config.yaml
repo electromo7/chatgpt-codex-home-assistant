@@ -1,5 +1,5 @@
 name: ChatGPT Codex
-version: "1.4.0"
+version: "1.5.0"
 slug: chatgpt_codex
 description: Run OpenAI Codex CLI in Home Assistant via a browser terminal.
 url: "https://github.com/OWNER/chatgpt-codex-home-assistant"
@@ -17,7 +17,7 @@ map:
   - homeassistant_config:rw
   - share:rw
   - ssl
-apparmor: true
+apparmor: false
 options:
   openai_api_key: ""
   openai_base_url: ""
