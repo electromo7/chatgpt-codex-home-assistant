@@ -15,8 +15,10 @@ RUN apk add --no-cache \
   && npm install --global @openai/codex \
   && npm cache clean --force
 
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
-
-ENTRYPOINT []
-CMD [ "/bin/bash", "/run.sh" ]
+# S6 overlay service setup
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/chatgpt-codex/dependencies.d
+COPY run.sh /etc/s6-overlay/s6-rc.d/chatgpt-codex/run
+RUN chmod a+x /etc/s6-overlay/s6-rc.d/chatgpt-codex/run \
+  && echo "longrun" > /etc/s6-overlay/s6-rc.d/chatgpt-codex/type \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/chatgpt-codex \
+  && touch /etc/s6-overlay/s6-rc.d/chatgpt-codex/dependencies.d/base

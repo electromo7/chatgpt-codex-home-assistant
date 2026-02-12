@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/with-contenv bash
 set -euo pipefail
 
 echo "[INFO] ChatGPT Codex add-on starting..."
