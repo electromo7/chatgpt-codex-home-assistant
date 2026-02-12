@@ -28,10 +28,34 @@ jobs:
         with:
           dockerfile: chatgpt-codex/Dockerfile
 
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python test dependencies
+        run: pip install pytest pyyaml
+
+      - name: Install bats
+        run: npm install -g bats
+
+      - name: Run pytest (config & structure)
+        run: python -m pytest tests/test_config.py -v
+
+      - name: Run bats (shell script tests)
+        run: bats tests/test_run.bats
+
   build:
     name: Docker Build (amd64)
     runs-on: ubuntu-latest
-    needs: lint
+    needs: [lint, test]
     steps:
       - uses: actions/checkout@v4
 

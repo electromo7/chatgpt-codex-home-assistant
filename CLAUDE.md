@@ -30,7 +30,26 @@ cd chatgpt-codex && docker build -t chatgpt-codex:latest .
 # Or install via Home Assistant: Settings → Add-ons → Add-on Store → add this repo URL
 ```
 
-There are no tests, linters, or CI pipelines configured.
+## Testing
+
+```bash
+# Run all tests (requires pytest, pyyaml, bats)
+./tests/run_tests.sh
+
+# Run only Python config/structure tests
+python3 -m pytest tests/test_config.py -v
+
+# Run only shell script (bats) tests
+bats tests/test_run.bats
+```
+
+**Dependencies**: `pip install pytest pyyaml` and `npm install -g bats`
+
+Tests are organized as:
+- `tests/test_config.py` — validates config.yaml schema, repository.yaml, translations, Dockerfile, and AppArmor profile (pytest)
+- `tests/test_run.bats` — validates run.sh configuration parsing, API key validation, port logic, ttyd argument construction, and wrapper script generation (bats)
+
+CI runs linting (yamllint, shellcheck, hadolint) and tests automatically on push/PR to main.
 
 ## Key Configuration (config.yaml)
 
