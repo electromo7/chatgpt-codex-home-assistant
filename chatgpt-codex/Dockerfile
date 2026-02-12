@@ -18,4 +18,5 @@ RUN apk add --no-cache \
 COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
-CMD [ "/run.sh" ]
+ENTRYPOINT []
+CMD [ "/bin/bash", "/run.sh" ]
