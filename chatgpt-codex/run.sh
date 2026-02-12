@@ -39,9 +39,10 @@ cd "${WORKSPACE}" || { echo "[FATAL] Cannot access workspace: ${WORKSPACE}"; exi
 
 # Determine port: use HA ingress port if available, otherwise 7681
 PORT="${INGRESS_PORT:-7681}"
+echo "[DEBUG] INGRESS_PORT=${INGRESS_PORT:-not set}, using PORT=${PORT}"
 
 # Build ttyd arguments
-TTYD_ARGS=(--writable --port "${PORT}" --base-path /)
+TTYD_ARGS=(--writable --port "${PORT}")
 
 if [ "${MAX_SESSIONS}" -gt 0 ] 2>/dev/null; then
     TTYD_ARGS+=(--max-clients "${MAX_SESSIONS}")
