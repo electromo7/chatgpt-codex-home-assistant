@@ -1,14 +1,14 @@
-# 🚀 Codex Command Center for Home Assistant
+# 🚀 Home Assistant Add-on: Codex Command Center
 
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Add--on-41BDF5?logo=homeassistant&logoColor=white)](https://www.home-assistant.io/)
 [![Version](https://img.shields.io/badge/version-1.0.0-success)](./chatgpt-codex/config.yaml)
 [![Stars welcome](https://img.shields.io/badge/⭐-Star%20this%20repo-yellow)](#support-the-project)
 
-Give your smart home a real AI terminal: **Codex Command Center** brings the OpenAI Codex CLI directly into Home Assistant with secure Ingress access and a polished operator experience.
+**Built specifically for Home Assistant**: Codex Command Center is a dedicated HA add-on that brings the OpenAI Codex CLI directly into your HA sidebar via secure Ingress access.
 
 ---
 
-## ✨ Why this project stands out
+## ✨ Why this Home Assistant add-on stands out
 
 - **Native Home Assistant UX** — launch directly in the HA sidebar with authentication.
 - **Ready in minutes** — install add-on, paste API key, start building.
@@ -28,7 +28,7 @@ Give your smart home a real AI terminal: **Codex Command Center** brings the Ope
 
 1. Open **Home Assistant → Settings → Add-ons → Add-on Store**.
 2. Click **⋮ → Repositories** and add this repository URL.
-3. Install **Codex Command Center**.
+3. Install **Home Assistant Codex Command Center**.
 4. Set your `openai_api_key`.
 5. Start the add-on and open the Web UI.
 

@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - Reset project versioning to `1.0.0` for the production launch baseline
-- Renamed the add-on to **Codex Command Center**
+- Renamed the add-on to **Home Assistant Codex Command Center** to make HA scope explicit
 - Refreshed repository and add-on presentation text for a launch-ready GitHub profile
 
 ### Included

@@ -1,4 +1,4 @@
-# Home Assistant Add-on: Codex Command Center
+# Home Assistant Add-on: Codex Command Center (Home Assistant)
 
 ## Overview
 
@@ -8,7 +8,7 @@ This add-on provides a browser-based terminal running the OpenAI Codex CLI direc
 
 1. Add this repository URL to your Home Assistant add-on store:
    **Settings > Add-ons > Add-on Store > Menu (⋮) > Repositories**
-2. Find "Codex Command Center" in the store and click **Install**.
+2. Find "Home Assistant Codex Command Center" in the store and click **Install**.
 3. Configure your OpenAI API key in the add-on options.
 4. Start the add-on and click **Open Web UI**.
 
