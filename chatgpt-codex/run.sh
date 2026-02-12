@@ -71,5 +71,16 @@ echo "[INFO] Starting ChatGPT Codex terminal on port ${PORT}..."
 echo "[INFO] Workspace: ${WORKSPACE}"
 echo "[DEBUG] ttyd args: ${TTYD_ARGS[*]}"
 
+# Write a wrapper script so ttyd sessions inherit the environment
+cat > /tmp/codex-wrapper.sh <<WRAPPER
+#!/bin/bash
+export OPENAI_API_KEY="${OPENAI_API_KEY}"
+${OPENAI_BASE_URL:+export OPENAI_BASE_URL="${OPENAI_BASE_URL}"}
+export HOME="/root"
+cd "${WORKSPACE}"
+exec codex ${CODEX_ARGS}
+WRAPPER
+chmod +x /tmp/codex-wrapper.sh
+
 # shellcheck disable=SC2086
-exec ttyd "${TTYD_ARGS[@]}" bash -lc "codex ${CODEX_ARGS}"
+exec ttyd "${TTYD_ARGS[@]}" /tmp/codex-wrapper.sh
