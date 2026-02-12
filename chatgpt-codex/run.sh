@@ -71,10 +71,19 @@ echo "[INFO] Starting ChatGPT Codex terminal on port ${PORT}..."
 echo "[INFO] Workspace: ${WORKSPACE}"
 echo "[DEBUG] ttyd args: ${TTYD_ARGS[*]}"
 
+# Pre-authenticate codex with API key (avoids OAuth browser redirect)
+export HOME="/root"
+mkdir -p "${HOME}/.codex"
+echo "[INFO] Logging in to codex with API key..."
+printf '%s' "${OPENAI_API_KEY}" | codex login --with-api-key 2>&1 || {
+    echo "[WARN] codex login failed, will try running anyway"
+}
+
 # Write a wrapper script so ttyd sessions inherit the environment
 cat > /tmp/codex-wrapper.sh <<WRAPPER
 #!/bin/bash
 export OPENAI_API_KEY="${OPENAI_API_KEY}"
+export CODEX_API_KEY="${OPENAI_API_KEY}"
 ${OPENAI_BASE_URL:+export OPENAI_BASE_URL="${OPENAI_BASE_URL}"}
 export HOME="/root"
 cd "${WORKSPACE}"
