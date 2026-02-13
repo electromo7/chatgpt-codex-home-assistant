@@ -81,9 +81,10 @@ printf '%s' "${OPENAI_API_KEY}" | codex login --with-api-key 2>&1 || {
 
 # Persist Supervisor token to file so ha-query can read it even inside Codex sandbox
 if [[ -n "${SUPERVISOR_TOKEN:-}" ]]; then
-    echo "${SUPERVISOR_TOKEN}" > /run/ha-query-token
-    chmod 600 /run/ha-query-token
-    echo "[INFO] Supervisor token available for ha-query"
+    echo "${SUPERVISOR_TOKEN}" > /tmp/ha-supervisor-token
+    chmod 644 /tmp/ha-supervisor-token
+    cp /tmp/ha-supervisor-token /run/ha-query-token 2>/dev/null || true
+    echo "[INFO] Supervisor token written (length: ${#SUPERVISOR_TOKEN})"
 else
     echo "[WARN] SUPERVISOR_TOKEN not set — ha-query will not work"
 fi

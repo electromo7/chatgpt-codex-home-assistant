@@ -76,17 +76,33 @@ EOF
 }
 
 _check_token() {
-  # Try environment variable first, then fall back to token file (Codex sandbox may strip env vars)
+  # Try environment variables first (SUPERVISOR_TOKEN, HASSIO_TOKEN)
   if [[ -z "${SUPERVISOR_TOKEN:-}" ]]; then
-    if [[ -r /run/ha-query-token ]]; then
-      SUPERVISOR_TOKEN="$(cat /run/ha-query-token)"
-      export SUPERVISOR_TOKEN
-    else
-      echo "Error: SUPERVISOR_TOKEN is not set and /run/ha-query-token not found." >&2
-      echo "This tool must run inside a Home Assistant add-on container." >&2
-      exit 1
+    SUPERVISOR_TOKEN="${HASSIO_TOKEN:-}"
+  fi
+
+  # Fall back to token files (Codex sandbox may strip env vars)
+  if [[ -z "${SUPERVISOR_TOKEN:-}" ]]; then
+    local token_file=""
+    for f in /tmp/ha-supervisor-token /run/ha-query-token; do
+      if [[ -r "$f" ]]; then
+        token_file="$f"
+        break
+      fi
+    done
+
+    if [[ -n "$token_file" ]]; then
+      SUPERVISOR_TOKEN="$(cat "$token_file")"
     fi
   fi
+
+  if [[ -z "${SUPERVISOR_TOKEN:-}" ]]; then
+    echo "Error: No Supervisor token found." >&2
+    echo "Checked: \$SUPERVISOR_TOKEN, \$HASSIO_TOKEN, /tmp/ha-supervisor-token, /run/ha-query-token" >&2
+    exit 1
+  fi
+
+  export SUPERVISOR_TOKEN
 }
 
 # Perform an API request.
@@ -365,6 +381,17 @@ case "$1" in
   info)
     shift
     cmd_info "$@"
+    ;;
+  debug)
+    echo "SUPERVISOR_TOKEN set: $([[ -n "${SUPERVISOR_TOKEN:-}" ]] && echo "yes (${#SUPERVISOR_TOKEN} chars)" || echo "no")"
+    echo "HASSIO_TOKEN set:     $([[ -n "${HASSIO_TOKEN:-}" ]] && echo "yes (${#HASSIO_TOKEN} chars)" || echo "no")"
+    echo "/tmp/ha-supervisor-token: $([ -r /tmp/ha-supervisor-token ] && echo "exists ($(wc -c < /tmp/ha-supervisor-token) bytes)" || echo "not found")"
+    echo "/run/ha-query-token:      $([ -r /run/ha-query-token ] && echo "exists ($(wc -c < /run/ha-query-token) bytes)" || echo "not found")"
+    _check_token
+    echo "Token resolved: yes (${#SUPERVISOR_TOKEN} chars)"
+    echo "Testing API..."
+    curl -s -o /dev/null -w "HTTP %{http_code}" -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" http://supervisor/core/api/config
+    echo ""
     ;;
   --help|-h)
     _usage

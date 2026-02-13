@@ -1,6 +1,6 @@
 ---
 name: Home Assistant Codex Command Center
-version: "1.1.1"
+version: "1.1.2"
 slug: chatgpt_codex
 description: >-
   Home Assistant add-on: Codex CLI workspace via secure browser terminal.
