@@ -22,6 +22,7 @@ Commands:
   states          List entity states
   call_service    Call a Home Assistant service
   info            Show Home Assistant configuration info
+  snapshot        Generate HA_ENTITIES.md overview of all entities
 
 Global options:
   --help, -h      Show this help message
@@ -360,6 +361,127 @@ cmd_info() {
   fi
 }
 
+cmd_snapshot() {
+  local output_file="${1:-HA_ENTITIES.md}"
+
+  _check_token
+
+  local response
+  response="$(_api_request GET /states)" || exit 1
+
+  # Also fetch config for system info
+  local config
+  config="$(_api_request GET /config)" || config="{}"
+
+  local location
+  location="$(echo "$config" | jq -r '.location_name // "Home Assistant"')"
+  local version
+  version="$(echo "$config" | jq -r '.version // "unknown"')"
+
+  # Domain display names (German)
+  local -A domain_labels=(
+    [light]="Lichter"
+    [switch]="Schalter"
+    [sensor]="Sensoren"
+    [binary_sensor]="Binäre Sensoren (Bewegungsmelder etc.)"
+    [automation]="Automationen"
+    [script]="Scripts"
+    [scene]="Szenen"
+    [climate]="Klimageräte / Heizungen"
+    [cover]="Rollläden / Abdeckungen"
+    [fan]="Ventilatoren"
+    [media_player]="Mediaplayer (TV, Alexa, Lautsprecher)"
+    [camera]="Kameras"
+    [lock]="Schlösser"
+    [vacuum]="Staubsauger"
+    [input_boolean]="Eingabe-Schalter"
+    [input_number]="Eingabe-Zahlen"
+    [input_select]="Eingabe-Auswahl"
+    [input_text]="Eingabe-Text"
+    [input_datetime]="Eingabe-Datum/Zeit"
+    [input_button]="Eingabe-Buttons"
+    [timer]="Timer"
+    [counter]="Zähler"
+    [button]="Buttons"
+    [select]="Auswahlfelder"
+    [number]="Zahlenwerte"
+    [text]="Textfelder"
+    [device_tracker]="Geräte-Tracker"
+    [person]="Personen"
+    [zone]="Zonen"
+    [sun]="Sonne"
+    [weather]="Wetter"
+    [update]="Updates"
+    [remote]="Fernbedienungen"
+    [alarm_control_panel]="Alarmanlagen"
+    [water_heater]="Warmwasserbereiter"
+    [humidifier]="Luftbefeuchter"
+    [notify]="Benachrichtigungen"
+    [tts]="Text-to-Speech"
+    [stt]="Speech-to-Text"
+    [calendar]="Kalender"
+    [todo]="To-Do Listen"
+    [image]="Bilder"
+    [siren]="Sirenen"
+    [event]="Ereignisse"
+    [valve]="Ventile"
+    [lawn_mower]="Rasenmäher"
+    [wake_word]="Wake Words"
+    [conversation]="Konversation"
+  )
+
+  # Extract all domains and sort them
+  local domains
+  domains="$(echo "$response" | jq -r '[.[].entity_id | split(".")[0]] | unique | .[]')"
+
+  # Build the markdown file
+  {
+    echo "# Home Assistant Entities — ${location}"
+    echo ""
+    echo "> Auto-generiert am $(date '+%Y-%m-%d %H:%M') | HA Version: ${version}"
+    echo "> Aktualisieren: \`ha-query snapshot\`"
+    echo "> Diese Datei kann manuell bearbeitet werden (z.B. Raum/Notizen ergänzen)."
+    echo "> Eigene Änderungen bleiben erhalten, solange die Datei nicht überschrieben wird."
+    echo ""
+
+    for domain in $domains; do
+      local label="${domain_labels[$domain]:-${domain}}"
+      local count
+      count="$(echo "$response" | jq --arg d "$domain" '[.[] | select(.entity_id | startswith($d + "."))] | length')"
+
+      # Skip empty domains
+      if [[ "$count" -eq 0 ]]; then
+        continue
+      fi
+
+      echo "## ${label} (${domain}) — ${count} Entities"
+      echo ""
+      echo "| Entity ID | Name | Status | Raum / Notiz |"
+      echo "|-----------|------|--------|--------------|"
+
+      echo "$response" | jq -r --arg d "$domain" '
+        [.[] | select(.entity_id | startswith($d + "."))]
+        | sort_by(.attributes.friendly_name // .entity_id)
+        | .[]
+        | "| `" + .entity_id + "` | " + (.attributes.friendly_name // "-") + " | " + .state + " | |"
+      '
+
+      echo ""
+    done
+
+    echo "---"
+    echo ""
+    echo "## Hinweise"
+    echo ""
+    echo "- **Raum / Notiz**: Hier kannst du manuell Räume oder Hinweise eintragen"
+    echo "- **Status**: Zeigt den Status zum Zeitpunkt des Snapshots"
+    echo "- Aktualisiere mit \`ha-query snapshot\` (überschreibt die Datei!)"
+    echo "- Tipp: Kopiere die Datei als \`HA_ENTITIES_CUSTOM.md\` um eigene Notizen dauerhaft zu sichern"
+  } > "$output_file"
+
+  echo "Snapshot written to ${output_file} ($(wc -l < "$output_file") lines)"
+}
+
 ###############################################################################
 # Main dispatch
 ###############################################################################
@@ -381,6 +503,10 @@ case "$1" in
   info)
     shift
     cmd_info "$@"
+    ;;
+  snapshot)
+    shift
+    cmd_snapshot "$@"
     ;;
   debug)
     echo "=== Token Discovery ==="

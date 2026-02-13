@@ -89,6 +89,12 @@ else
     echo "[WARN] SUPERVISOR_TOKEN not set — ha-query will not work"
 fi
 
+# Generate initial entity snapshot for Codex context
+echo "[INFO] Generating entity snapshot..."
+ha-query snapshot "${WORKSPACE}/HA_ENTITIES.md" 2>/dev/null && \
+    echo "[INFO] Entity snapshot written to ${WORKSPACE}/HA_ENTITIES.md" || \
+    echo "[WARN] Could not generate entity snapshot (HA Core may still be starting)"
+
 # Write Codex instructions so it knows about ha-query
 cat > "${WORKSPACE}/AGENTS.md" <<'AGENTS'
 # Home Assistant Codex Agent
@@ -109,8 +115,17 @@ ha-query call_service DOMAIN.SERVICE --entity_id ENTITY_ID [--data '{"key":"val"
 ha-query info [--pretty]
 ```
 
+## Entity Overview
+
+The file `HA_ENTITIES.md` in this directory contains a snapshot of ALL Home Assistant
+entities with their names, IDs, and current states. **Read this file first** before
+querying states — it tells you the exact entity_id for any device.
+
+To refresh it: `ha-query snapshot HA_ENTITIES.md`
+
 ## Guidelines
 
+- **Always read HA_ENTITIES.md first** to find the correct entity_id
 - When the user asks about entities, lights, sensors, switches etc. → use `ha-query states`
 - When the user wants to control devices → use `ha-query call_service`
 - Always use `--dry-run` first for destructive or unfamiliar service calls
