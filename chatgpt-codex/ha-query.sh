@@ -76,9 +76,16 @@ EOF
 }
 
 _check_token() {
+  # Try environment variable first, then fall back to token file (Codex sandbox may strip env vars)
   if [[ -z "${SUPERVISOR_TOKEN:-}" ]]; then
-    echo "Error: SUPERVISOR_TOKEN is not set. This tool must run inside a Home Assistant add-on container." >&2
-    exit 1
+    if [[ -r /run/ha-query-token ]]; then
+      SUPERVISOR_TOKEN="$(cat /run/ha-query-token)"
+      export SUPERVISOR_TOKEN
+    else
+      echo "Error: SUPERVISOR_TOKEN is not set and /run/ha-query-token not found." >&2
+      echo "This tool must run inside a Home Assistant add-on container." >&2
+      exit 1
+    fi
   fi
 }
 

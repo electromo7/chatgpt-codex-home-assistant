@@ -79,6 +79,15 @@ printf '%s' "${OPENAI_API_KEY}" | codex login --with-api-key 2>&1 || {
     echo "[WARN] codex login failed, will try running anyway"
 }
 
+# Persist Supervisor token to file so ha-query can read it even inside Codex sandbox
+if [[ -n "${SUPERVISOR_TOKEN:-}" ]]; then
+    echo "${SUPERVISOR_TOKEN}" > /run/ha-query-token
+    chmod 600 /run/ha-query-token
+    echo "[INFO] Supervisor token available for ha-query"
+else
+    echo "[WARN] SUPERVISOR_TOKEN not set — ha-query will not work"
+fi
+
 # Write a wrapper script so ttyd sessions inherit the environment
 cat > /tmp/codex-wrapper.sh <<WRAPPER
 #!/bin/bash
@@ -86,6 +95,7 @@ export OPENAI_API_KEY="${OPENAI_API_KEY}"
 export CODEX_API_KEY="${OPENAI_API_KEY}"
 ${OPENAI_BASE_URL:+export OPENAI_BASE_URL="${OPENAI_BASE_URL}"}
 export SUPERVISOR_TOKEN="${SUPERVISOR_TOKEN:-}"
+export HASSIO_TOKEN="${SUPERVISOR_TOKEN:-}"
 export HOME="/root"
 cd "${WORKSPACE}"
 exec codex ${CODEX_ARGS}
