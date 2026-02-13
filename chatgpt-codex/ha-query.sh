@@ -383,15 +383,21 @@ case "$1" in
     cmd_info "$@"
     ;;
   debug)
-    echo "SUPERVISOR_TOKEN set: $([[ -n "${SUPERVISOR_TOKEN:-}" ]] && echo "yes (${#SUPERVISOR_TOKEN} chars)" || echo "no")"
-    echo "HASSIO_TOKEN set:     $([[ -n "${HASSIO_TOKEN:-}" ]] && echo "yes (${#HASSIO_TOKEN} chars)" || echo "no")"
-    echo "/tmp/ha-supervisor-token: $([ -r /tmp/ha-supervisor-token ] && echo "exists ($(wc -c < /tmp/ha-supervisor-token) bytes)" || echo "not found")"
-    echo "/run/ha-query-token:      $([ -r /run/ha-query-token ] && echo "exists ($(wc -c < /run/ha-query-token) bytes)" || echo "not found")"
+    echo "=== Token Discovery ==="
+    echo "SUPERVISOR_TOKEN env: $([[ -n "${SUPERVISOR_TOKEN:-}" ]] && echo "yes (${#SUPERVISOR_TOKEN} chars)" || echo "no")"
+    echo "HASSIO_TOKEN env:     $([[ -n "${HASSIO_TOKEN:-}" ]] && echo "yes (${#HASSIO_TOKEN} chars)" || echo "no")"
+    echo "/tmp/ha-supervisor-token: $([ -r /tmp/ha-supervisor-token ] && echo "exists" || echo "not found")"
     _check_token
-    echo "Token resolved: yes (${#SUPERVISOR_TOKEN} chars)"
-    echo "Testing API..."
-    curl -s -o /dev/null -w "HTTP %{http_code}" -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" http://supervisor/core/api/config
     echo ""
+    echo "=== Testing API Endpoints ==="
+    for url in \
+      "http://supervisor/core/api/config" \
+      "http://supervisor/core/config" \
+      "http://supervisor/api/config" \
+      "http://homeassistant:8123/api/config"; do
+      code=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" "$url" 2>/dev/null || echo "ERR")
+      echo "  ${code}  ${url}"
+    done
     ;;
   --help|-h)
     _usage
