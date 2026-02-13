@@ -15,6 +15,9 @@ RUN apk add --no-cache \
   && npm install --global @openai/codex \
   && npm cache clean --force
 
+COPY ha-query.sh /usr/local/bin/ha-query
+RUN chmod +x /usr/local/bin/ha-query
+
 # S6 overlay service setup
 RUN mkdir -p /etc/s6-overlay/s6-rc.d/chatgpt-codex/dependencies.d
 COPY run.sh /etc/s6-overlay/s6-rc.d/chatgpt-codex/run
