@@ -12,6 +12,7 @@ RUN apk add --no-cache \
     nodejs \
     npm \
     ttyd \
+    util-linux \
   && npm install --global @openai/codex \
   && npm cache clean --force
 

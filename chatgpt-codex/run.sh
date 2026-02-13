@@ -89,6 +89,34 @@ else
     echo "[WARN] SUPERVISOR_TOKEN not set — ha-query will not work"
 fi
 
+# Write Codex instructions so it knows about ha-query
+cat > "${WORKSPACE}/AGENTS.md" <<'AGENTS'
+# Home Assistant Codex Agent
+
+You have access to the `ha-query` CLI tool for interacting with Home Assistant.
+Use it directly — do NOT search the codebase for it.
+
+## Available commands
+
+```bash
+# List entity states (optionally filter by domain/state)
+ha-query states [--domain light|switch|sensor|...] [--state on|off|...] [--pretty]
+
+# Call a Home Assistant service
+ha-query call_service DOMAIN.SERVICE --entity_id ENTITY_ID [--data '{"key":"val"}'] [--dry-run] [--pretty]
+
+# Show Home Assistant system info
+ha-query info [--pretty]
+```
+
+## Guidelines
+
+- When the user asks about entities, lights, sensors, switches etc. → use `ha-query states`
+- When the user wants to control devices → use `ha-query call_service`
+- Always use `--dry-run` first for destructive or unfamiliar service calls
+- Respond in the same language the user uses
+AGENTS
+
 # Write a wrapper script so ttyd sessions inherit the environment
 cat > /tmp/codex-wrapper.sh <<WRAPPER
 #!/bin/bash
