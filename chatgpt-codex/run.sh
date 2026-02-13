@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv bash
+# shellcheck shell=bash
 set -euo pipefail
 
 echo "[INFO] Home Assistant Codex Command Center add-on starting..."
