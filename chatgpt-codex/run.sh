@@ -85,6 +85,7 @@ cat > /tmp/codex-wrapper.sh <<WRAPPER
 export OPENAI_API_KEY="${OPENAI_API_KEY}"
 export CODEX_API_KEY="${OPENAI_API_KEY}"
 ${OPENAI_BASE_URL:+export OPENAI_BASE_URL="${OPENAI_BASE_URL}"}
+export SUPERVISOR_TOKEN="${SUPERVISOR_TOKEN:-}"
 export HOME="/root"
 cd "${WORKSPACE}"
 exec codex ${CODEX_ARGS}
